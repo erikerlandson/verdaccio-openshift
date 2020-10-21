@@ -1,14 +1,16 @@
 #!/bin/bash
 
-if [ -f /opt/verdaccio/src/packages.json ]; then
+if [ -f /opt/verdaccio/src/package.json ]; then
     echo "pre-caching with user-supplied packages.json"
-    cd /tmp
-    cp /opt/verdaccio/src/packages.json .
 
     # spin up verdaccio as a transient service and run npm to pre-populate its cache
     echo "starting transient verdaccio server"
+    cd /opt/verdaccio
     (verdaccio &)
     sleep 5
+
+    cd /tmp
+    cp /opt/verdaccio/src/package.json .
 
     # do a temporary install so verdaccio will cache the libs
     echo "performing npm install to stimulate verdaccio caching"
@@ -29,13 +31,13 @@ else
     echo "no precaching of packages on this image"
 fi
 
-if [ -f /opt/verdaccio/src/config.json ]; then
-    echo "configuring with user-supplied verdaccio config.json"
-    cp /opt/verdaccio/src/config.json /opt/verdaccio
+if [ -f /opt/verdaccio/src/config.yaml ]; then
+    echo "configuring with user-supplied verdaccio config"
+    cp /opt/verdaccio/src/config.yaml /opt/verdaccio
 else
-    echo "no user-supplied verdaccio config.json"
+    echo "no user-supplied verdaccio config"
     echo "configuring with s2i default verdaccio config"
-    cp /opt/verdaccio/s2i/config.json /opt/verdaccio
+    cp /opt/verdaccio/s2i/config.yaml /opt/verdaccio
 fi
 
-chmod g+rw /opt/verdaccio/config.json
+chmod g+rw /opt/verdaccio/config.yaml
