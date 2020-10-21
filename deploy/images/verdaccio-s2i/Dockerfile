@@ -1,7 +1,7 @@
 FROM quay.io/erikerlandson/verdaccio-ubi:s2i
 
 # s2i scripts assemble, run
-LABEL io.openshift.s2i.scripts-url=image:///opt/verdaccio/s2i
+LABEL io.openshift.s2i.scripts-url=image:///opt/verdaccio/s2i/bin
 
 # s2i source loads here
 LABEL io.openshift.s2i.destination=image:///opt/verdaccio/src
