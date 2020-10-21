@@ -9,10 +9,14 @@ WORKDIR /opt/verdaccio
 # defines the packages to run verdaccio and any plugins
 COPY package.json ./
 
+# script that starts up verdaccio server
+COPY run-verdaccio ./bin/
+
 # Install verdaccio and plugins.
 # make sure resulting installs are readable by gid 0
 RUN npm install \
  && chown -R 9999:0 /opt/verdaccio \
+ && chmod a+rx /opt/verdaccio/bin/* \
  && chmod -R g+rwX /opt/verdaccio
 
 ENV PATH="/opt/verdaccio/node_modules/verdaccio/bin:$PATH" \
@@ -23,4 +27,4 @@ ENV PATH="/opt/verdaccio/node_modules/verdaccio/bin:$PATH" \
 USER 99999
 
 # default CMD is to run with no config.yaml (mostly default settings)
-CMD verdaccio --listen $VERDACCIO_PROTOCOL://0.0.0.0:$VERDACCIO_PORT
+CMD /opt/verdaccio/bin/run-verdaccio

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# VERDACCIO_CONFIG has no default - just run with no config.yaml
+export VERDACCIO_PROTOCOL=${VERDACCIO_PROTOCOL:-http}
+export VERDACCIO_PORT=${VERDACCIO_PORT:-4873}
+
+cd /opt/verdaccio
+
+if [ -z "$VERDACCIO_CONFIG" ]; then
+    export VCMD="verdaccio --listen $VERDACCIO_PROTOCOL://0.0.0.0:$VERDACCIO_PORT"
+else
+    export VCMD="verdaccio --config $VERDACCIO_CONFIG --listen $VERDACCIO_PROTOCOL://0.0.0.0:$VERDACCIO_PORT"
+fi
+
+exec "$VCMD"
