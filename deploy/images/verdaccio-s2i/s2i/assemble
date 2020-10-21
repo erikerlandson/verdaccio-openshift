@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -f /opt/verdaccio/src/package.json ]; then
-    echo "pre-caching with user-supplied packages.json"
+    echo "pre-caching with user-supplied package.json"
 
     # spin up verdaccio as a transient service and run npm to pre-populate its cache
     echo "starting transient verdaccio server"
@@ -27,7 +27,7 @@ if [ -f /opt/verdaccio/src/package.json ]; then
     echo "npm install cleanup"
     rm -rf /tmp/node_modules /tmp/.npm /tmp.npmrc
 else
-    echo "no user-supplied packages.json"
+    echo "no user-supplied package.json"
     echo "no precaching of packages on this image"
 fi
 
