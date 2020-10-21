@@ -6,10 +6,11 @@ export VERDACCIO_PORT=${VERDACCIO_PORT:-4873}
 
 cd /opt/verdaccio
 
+# the 'set -- ...' (re)sets the value of $@ which is used by exec below
 if [ -z "$VERDACCIO_CONFIG" ]; then
-    export VCMD="verdaccio --listen $VERDACCIO_PROTOCOL://0.0.0.0:$VERDACCIO_PORT"
+    set -- verdaccio --listen $VERDACCIO_PROTOCOL://0.0.0.0:$VERDACCIO_PORT
 else
-    export VCMD="verdaccio --config $VERDACCIO_CONFIG --listen $VERDACCIO_PROTOCOL://0.0.0.0:$VERDACCIO_PORT"
+    set -- verdaccio --config $VERDACCIO_CONFIG --listen $VERDACCIO_PROTOCOL://0.0.0.0:$VERDACCIO_PORT
 fi
 
-exec "$VCMD"
+exec "$@"

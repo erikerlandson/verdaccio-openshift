@@ -4,6 +4,12 @@ RUN microdnf install nodejs npm \
  && microdnf update \
  && microdnf clean all
 
+# I want an entrypoint that does proper signal handling
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini
+RUN chmod a+rx /tini
+ENTRYPOINT ["/tini", "--"]
+
 WORKDIR /opt/verdaccio
 
 # defines the packages to run verdaccio and any plugins
@@ -26,5 +32,5 @@ ENV PATH="/opt/verdaccio/node_modules/verdaccio/bin:$PATH" \
 # emulate an anonymous uid, which is better aligned with OpenShift environment
 USER 99999
 
-# default CMD is to run with no config.yaml (mostly default settings)
-CMD /opt/verdaccio/bin/run-verdaccio
+# delegate verdaccio startup to this script
+CMD [ "/opt/verdaccio/bin/run-verdaccio" ]
