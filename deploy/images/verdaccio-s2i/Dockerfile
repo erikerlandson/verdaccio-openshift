@@ -1,4 +1,4 @@
-FROM quay.io/verdaccio-openshift/verdaccio-ubi:0.1.0
+FROM quay.io/verdaccio-openshift/verdaccio-ubi:0.1.1
 
 USER root
 
