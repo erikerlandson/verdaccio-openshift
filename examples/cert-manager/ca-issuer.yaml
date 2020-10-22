@@ -1,0 +1,11 @@
+﻿apiVersion: cert-manager.io/v1alpha3
+kind: Issuer
+metadata:
+  name: ca-issuer
+spec:
+  # declare a CA certificate issuer
+  # cert-manager supports several kinds of issuer
+  ca:
+    # using a secret already created by cert-manager operator
+    # this could be some other secret containing a CA bundle
+    secretName: cert-manager-webhook-ca
