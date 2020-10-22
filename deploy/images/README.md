@@ -56,7 +56,7 @@ $ npm config set strict-ssl false --global
 ```
 or alternatively using environment vars:
 ```sh
-$ export npm_config_strict_ssl=true
+$ export npm_config_strict_ssl=false
 ```
 
 Another safer alternative is to set npm with the TLS certs you are using:
