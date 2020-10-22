@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ -f /opt/verdaccio/src/package.json ]; then
+    echo "pre-caching with user-supplied package.json"
+
+    # spin up verdaccio as a transient service and run npm to pre-populate its cache
+    echo "starting transient verdaccio server"
+    cd /opt/verdaccio
+    (verdaccio &)
+    sleep 5
+
+    cd /tmp
+    cp /opt/verdaccio/src/package.json .
+
+    # do a temporary install so verdaccio will cache the libs
+    echo "performing npm install to stimulate verdaccio caching"
+    export npm_config_cache=/tmp/.npm
+    export npm_config_userconfig=/tmp/.npmrc
+    npm install --registry http://localhost:4873
+
+    # we can't know what uid we are, or will be when we run.
+    # but our gid is 0 regardless so make sure everything is group-accessible
+    echo "setting group 0 access permissions on cache"
+    chmod -R g+rwX /opt/verdaccio/verdaccio
+
+    # we only wanted the cache so we can clean up this install
+    echo "npm install cleanup"
+    rm -rf /tmp/node_modules /tmp/.npm /tmp.npmrc
+else
+    echo "no user-supplied package.json"
+    echo "no precaching of packages on this image"
+fi
+
+if [ -f /opt/verdaccio/src/config.yaml ]; then
+    echo "configuring with user-supplied verdaccio config"
+    cp /opt/verdaccio/src/config.yaml /opt/verdaccio
+else
+    echo "no user-supplied verdaccio config"
+    echo "configuring with s2i default verdaccio config"
+    cp /opt/verdaccio/s2i/config.yaml /opt/verdaccio
+fi
+
+chmod g+rw /opt/verdaccio/config.yaml
