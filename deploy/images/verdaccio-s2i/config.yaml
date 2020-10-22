@@ -18,11 +18,20 @@ store:
 plugins: /verdaccio/plugins
 offline: true
 
-# turn off all "upstream" registry definitions
 # a list of other known repositories we can talk to
 uplinks:
-#  npmjs:
-#    url: https://registry.npmjs.org/
+  npmjs:
+    url: https://registry.npmjs.org/
+
+# TLS certs are never installed on images for security reasons.
+# Set these paths to image mount points, for example mounting
+# a k8s secret containing TLS cert files.
+# If you want to set these, the recommended way is creating
+# your own custom verdaccio image using source-to-image, via
+# the verdaccio-s2i builder-image.
+https:
+#  key: /opt/verdaccio/cert/verdaccio-key.pem
+#  cert: /opt/verdaccio/cert/verdaccio-cert.pem
 
 web:
   #enable: false
@@ -81,8 +90,3 @@ logs:
 # This affect the web and api (not developed yet)
 #i18n:
 #web: en-US
-
-# these aren't working - maybe use openshift and mount them
-https:
-#  key: /verdaccio/conf/verdaccio-key.pem
-#  cert: /verdaccio/conf/verdaccio-cert.pem
