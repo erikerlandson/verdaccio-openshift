@@ -29,6 +29,8 @@ ENV PATH="/opt/verdaccio/node_modules/verdaccio/bin:$PATH" \
     VERDACCIO_PROTOCOL=http \
     VERDACCIO_PORT=4873
 
+EXPOSE 4873
+
 # emulate an anonymous uid, which is better aligned with OpenShift environment
 USER 99999
 
