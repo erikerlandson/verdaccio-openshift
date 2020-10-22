@@ -1,4 +1,4 @@
-FROM quay.io/erikerlandson/verdaccio-ubi:s2i
+FROM quay.io/verdaccio-openshift/verdaccio-ubi:0.1.0
 
 USER root
 
