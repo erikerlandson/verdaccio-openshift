@@ -1,0 +1,19 @@
+{
+  "name": "s2i-example",
+  "version": "0.0.1",
+  "description": "pre-cache some popular npm packages",
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "react": "^17.0.1",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Erik Erlandson",
+  "license": "Apache-2.0"
+}
