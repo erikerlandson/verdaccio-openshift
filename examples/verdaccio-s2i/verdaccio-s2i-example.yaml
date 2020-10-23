@@ -1,0 +1,111 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: verdaccio-s2i-example
+spec:
+  lookupPolicy:
+    local: true
+---
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: verdaccio-s2i-example
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'verdaccio-s2i-example:latest'
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: DockerImage
+        name: 'quay.io/verdaccio-openshift/verdaccio-s2i:0.1.1'
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/erikerlandson/verdaccio-openshift.git'
+      ref: main
+    contextDir: examples/verdaccio-s2i/config
+  triggers:
+    - type: ConfigChange
+  runPolicy: Serial
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: verdaccio-s2i-example
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 4873
+      targetPort: 4873
+  selector:
+    app: verdaccio-s2i-example
+  sessionAffinity: None
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: verdaccio-s2i-example
+spec:
+  to:
+    kind: Service
+    name: verdaccio-s2i-example
+    weight: 100
+  port:
+    targetPort: 4873
+  tls:
+    termination: passthrough
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+---
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  name: verdaccio-s2i-example
+  labels:
+    app: verdaccio-s2i-example
+spec:
+  strategy:
+    type: Rolling
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - verdaccio-s2i-example
+        from:
+          kind: ImageStreamTag
+          name: 'verdaccio-s2i-example:latest'
+  replicas: 1
+  selector:
+    app: verdaccio-s2i-example
+    deploymentconfig: verdaccio-s2i-example
+  template:
+    metadata:
+      labels:
+        app: verdaccio-s2i-example
+        deploymentconfig: verdaccio-s2i-example
+    spec:
+      volumes:
+        - name: verdaccio-cert
+          secret:
+            secretName: verdaccio-cert
+            defaultMode: 420
+      containers:
+        - name: verdaccio-s2i-example
+          image: 'verdaccio-s2i-example:latest'
+          env:
+            - name: VERDACCIO_PROTOCOL
+              value: https
+          ports:
+            - containerPort: 4873
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: verdaccio-cert
+              readOnly: true
+              mountPath: /opt/verdaccio/cert
