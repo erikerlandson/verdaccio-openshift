@@ -7,9 +7,9 @@ This directory contains a tutorial example deployment of verdaccio using OpenShi
 ### TLS certificate prerequisite
 The tutorial assumes you have created an OpenShift secret named `verdaccio-cert` that contains
 TLS certs for verdaccio to run in `https` mode.
-You can create this secret yourself, or follow the instruction in the
+You can create this secret yourself, or follow the instruction in one of the
 [cert-manager](https://github.com/erikerlandson/verdaccio-openshift/tree/main/examples/cert-manager)
-tutorial.
+tutorials.
 
 ### verdaccio S2I conventions
 The verdaccio S2I builder image expects a context directory that may contain two files:
