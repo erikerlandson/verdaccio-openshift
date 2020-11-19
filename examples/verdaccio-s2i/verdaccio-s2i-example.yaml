@@ -57,7 +57,7 @@ spec:
   port:
     targetPort: 4873
   tls:
-    termination: passthrough
+    termination: edge
     insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
 ---
@@ -90,22 +90,22 @@ spec:
         app: verdaccio-s2i-example
         deploymentconfig: verdaccio-s2i-example
     spec:
-      volumes:
-        - name: verdaccio-cert
-          secret:
-            secretName: verdaccio-cert
-            defaultMode: 420
+      #volumes:
+      #  - name: verdaccio-cert
+      #    secret:
+      #      secretName: verdaccio-cert
+      #      defaultMode: 420
       containers:
         - name: verdaccio-s2i-example
           image: 'verdaccio-s2i-example:latest'
-          env:
-            - name: VERDACCIO_PROTOCOL
-              value: https
+          #env:
+          #  - name: VERDACCIO_PROTOCOL
+          #    value: https
           ports:
             - containerPort: 4873
               protocol: TCP
           imagePullPolicy: Always
-          volumeMounts:
-            - name: verdaccio-cert
-              readOnly: true
-              mountPath: /opt/verdaccio/cert
+          #volumeMounts:
+          #  - name: verdaccio-cert
+          #    readOnly: true
+          #    mountPath: /opt/verdaccio/cert
