@@ -25,7 +25,7 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/erikerlandson/verdaccio-openshift.git'
-      ref: main
+      ref: route-experiment
     contextDir: examples/verdaccio-s2i/config
   triggers:
     - type: ConfigChange
@@ -49,7 +49,10 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: verdaccio-s2i-example
+  annotations:
+    cert-utils-operator.redhat-cop.io/certs-from-secret: verdaccio-cert
 spec:
+  host: verdaccio.manyangled.dev
   to:
     kind: Service
     name: verdaccio-s2i-example
