@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1alpha3
+kind: Issuer
+metadata:
+  name: gcp-dns01-production
+spec:
+  acme:
+    email: erikerlandson@yahoo.com
+    privateKeySecretRef:
+      name: gcp-dns01-production-acme-key
+    # this issuer uses the letsencrypt production server (rate limits apply)
+    server: 'https://acme-v02.api.letsencrypt.org/directory'
+    solvers:
+      - dns01:
+          clouddns:
+            # Google Cloud Platform project ID
+            # example sonic-unicorn-123456
+            project: sonic-shuttle-294315
+            serviceAccountSecretRef:
+              # service-account you create with DNS-ADMIN privs in Google Cloud Platform
+              # choose key created in JSON format, download and store in secret:
+              # oc create secret generic gcp-dns01-svc-acct-key --from-file key.json
+              key: key.json
+              name: gcp-dns01-svc-acct-key
