@@ -73,7 +73,9 @@ The preceding BuildConfig will build an image that you an run as a verdaccio ser
 However, a "complete" deployment will usually require some other objects.
 
 You can create a fully functional verdaccio deployment in OpenShift by installing the objects in the
-manifest file `verdaccio-s2i-example.yaml` in this tutorial directory:
+manifest file `verdaccio-s2i-example.yaml` in this tutorial directory.
+Note that you will probably want to edit this YMAL to replace `verdaccio.manyangled.dev` with the
+hostname that you use (refer to the instructions in the tls-cert directory).
 
 ```sh
 $ cd /path/to/verdaccio-openshift/examples/verdaccio-s2i
@@ -96,26 +98,25 @@ forms of depenency injections to your server image.
 ### Using Your verdaccio Deployment
 
 You can test your verdaccio deployment with `npm`.
-Start by obtaining the URL for your route:
+You'll want to replace `verdaccio.manyangled.dev` with the hostname you used.
 
 ```sh
-$ oc get route/verdaccio-s2i-example
-NAME                    HOST/PORT                                                                    PATH      SERVICES                PORT      TERMINATION            WILDCARD
-verdaccio-s2i-example   verdaccio-s2i-example-verdaccio.apps.cluster-3027.3027.example.opentlc.com             verdaccio-s2i-example   4873      passthrough/Redirect   None
-```
+$ npm install react --registry https://verdaccio.manyangled.dev
 
-(You can also find this in the Route listsings of your OpenShift console)
-
-You can specify this URL as your npm registry to test your deployment:
-
-```sh
-# disable strict SSL if your TLS certs are self-signed or cause npm to complain
-$ export npm_config_strict_ssl=false
-$ npm install react --registry https://verdaccio-s2i-example-verdaccio.apps.cluster-3027.3027.example.opentlc.com/
+# ... you may see some WARN messages here ...
 
 + react@17.0.1
 added 4 packages from 3 contributors and audited 4 packages in 1.361s
 found 0 vulnerabilities
+```
+
+If your TLS certs were generated properly, the above npm test should work.
+However, if npm complains about certs that are self-signed or other problems,
+it may work to disable strict SSL:
+
+```sh
+# disable strict SSL if your TLS certs are self-signed or cause npm to complain
+$ export npm_config_strict_ssl=false
 ```
 
 ### deleting the deployment
@@ -134,6 +135,7 @@ If you installed the TLS certificates using the instructions in the
 example, you can delete them like this:
 ```sh
 oc delete certificate/verdaccio-certificate \
-          issuer/ca-issuer \
+          issuer/gcp-dns01-staging \
+          issuer/gcp-dns01-production \
           secret/verdaccio-cert
 ```
