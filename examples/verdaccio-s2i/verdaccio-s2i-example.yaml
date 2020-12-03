@@ -25,7 +25,7 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/erikerlandson/verdaccio-openshift.git'
-      ref: main
+      ref: route-experiment
     contextDir: examples/verdaccio-s2i/config
   triggers:
     - type: ConfigChange
@@ -49,7 +49,10 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: verdaccio-s2i-example
+  annotations:
+    cert-utils-operator.redhat-cop.io/certs-from-secret: verdaccio-cert
 spec:
+  host: verdaccio.manyangled.dev
   to:
     kind: Service
     name: verdaccio-s2i-example
@@ -57,7 +60,7 @@ spec:
   port:
     targetPort: 4873
   tls:
-    termination: passthrough
+    termination: edge
     insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
 ---
@@ -90,22 +93,22 @@ spec:
         app: verdaccio-s2i-example
         deploymentconfig: verdaccio-s2i-example
     spec:
-      volumes:
-        - name: verdaccio-cert
-          secret:
-            secretName: verdaccio-cert
-            defaultMode: 420
+      #volumes:
+      #  - name: verdaccio-cert
+      #    secret:
+      #      secretName: verdaccio-cert
+      #      defaultMode: 420
       containers:
         - name: verdaccio-s2i-example
           image: 'verdaccio-s2i-example:latest'
-          env:
-            - name: VERDACCIO_PROTOCOL
-              value: https
+          #env:
+          #  - name: VERDACCIO_PROTOCOL
+          #    value: https
           ports:
             - containerPort: 4873
               protocol: TCP
           imagePullPolicy: Always
-          volumeMounts:
-            - name: verdaccio-cert
-              readOnly: true
-              mountPath: /opt/verdaccio/cert
+          #volumeMounts:
+          #  - name: verdaccio-cert
+          #    readOnly: true
+          #    mountPath: /opt/verdaccio/cert

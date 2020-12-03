@@ -27,8 +27,8 @@ uplinks:
 
 # certs to support TLS - assumed to be mounted via k8s secret
 https:
-  key: /opt/verdaccio/cert/tls.key
-  cert: /opt/verdaccio/cert/tls.crt
+  #key: /opt/verdaccio/cert/tls.key
+  #cert: /opt/verdaccio/cert/tls.crt
 
 web:
   title: Verdaccio
