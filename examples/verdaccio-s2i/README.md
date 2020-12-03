@@ -131,7 +131,7 @@ oc delete deploymentconfig/verdaccio-s2i-example \
 ```
 
 If you installed the TLS certificates using the instructions in the
-[cert-manager](/examples/verdaccio-s2i/tls-certs#tls-with-the-cert-manager-operator-and-edge-routes)
+[cert-manager](/examples/verdaccio-s2i/tls-certs/)
 example, you can delete them like this:
 ```sh
 oc delete certificate/verdaccio-certificate \
