@@ -13,4 +13,4 @@ spec:
     - verdaccio.manyangled.dev
   issuerRef:
     # change this to the production issuer when you are ready
-    name: gcp-dns01-production
+    name: gcp-dns01-staging

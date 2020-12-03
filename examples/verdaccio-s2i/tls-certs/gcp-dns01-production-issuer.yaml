@@ -4,7 +4,7 @@ metadata:
   name: gcp-dns01-production
 spec:
   acme:
-    email: erikerlandson@yahoo.com
+    email: {{ your_email }}
     privateKeySecretRef:
       name: gcp-dns01-production-acme-key
     # this issuer uses the letsencrypt production server (rate limits apply)
@@ -14,7 +14,7 @@ spec:
           clouddns:
             # Google Cloud Platform project ID
             # example sonic-unicorn-123456
-            project: sonic-shuttle-294315
+            project: {{ your_gcp_project_id }}
             serviceAccountSecretRef:
               # service-account you create with DNS-ADMIN privs in Google Cloud Platform
               # choose key created in JSON format, download and store in secret:
