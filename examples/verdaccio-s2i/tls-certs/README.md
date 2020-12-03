@@ -24,18 +24,23 @@ You can learn more about `cert-manager` from the project
 The documentation for the `cert-utils` operator can be found
 [here](https://github.com/redhat-cop/cert-utils-operator#cert-utils-operator).
 
-### Deploying the cert-manager operator
+### Deploying the `cert-manager` and `cert-utils` operators
 
 The verdaccio-openshift edge route can be populated by TLS certificates from any secret.
 However, the OpenShift
 [OperatorHub](https://docs.openshift.com/container-platform/4.5/operators/understanding/olm-understanding-operatorhub.html)
 provides tools that can make TLS certificate generation and
 management easier.
-One popular example is the
+Two operators we will use in this example are the
 [cert-manager](https://cert-manager.io/docs/)
+operator and the
+[cert-utils](https://github.com/redhat-cop/cert-utils-operator#cert-utils-operator)
 operator.
-You can subscribe to this operator (as cluster admin) from OpenShift OperatorHub and
-deploy a cert-manager instance into your OpenShift project (as a developer).
+You can subscribe to these operators (as cluster admin) from OpenShift OperatorHub and
+deploy operator instances into your OpenShift project (as a developer).
+Note that at this time, the `cert-utils` operator installs directly into a particular
+project namespace, so be sure to specify the correct OpenShift project when you install it
+(there is no separate deploy-instance step).
 
 Once you have deployed cert-manager into your OpenShift project,
 you must configure one or more certificate Issuers.
